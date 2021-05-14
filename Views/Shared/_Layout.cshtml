@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title</title>
+    <link href="~/libs/bootstrap-5.0.1/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/libs/jsoneditor-9.4.1/jsoneditor.css" rel="stylesheet" asp-append-version="true" />
+    @await RenderSectionAsync(name: "styles", required: false)
+</head>
+<body>
+
+    <div class="container-fluid">
+        @RenderBody()
+    </div>
+
+
+    <script src="~/libs/bootstrap-5.0.1/bootstrap.bundle.min.js" asp-append-version="true"></script>
+    <script src="~/libs/jsoneditor-9.4.1/jsoneditor.js" asp-append-version="true"></script>
+    <script src="~/libs/jquery-3.6.0/jquery-3.6.0.min.js" asp-append-version="true"></script>
+    @await RenderSectionAsync(name: "scripts", required: false)
+</body>
+</html>

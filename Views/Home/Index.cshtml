@@ -1,0 +1,87 @@
+﻿@model List<JsonFileViewModel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+
+<div class="row m-3">
+    <div class="col">
+        <div class="alert alert-primary" role="alert">
+            Open, Edit, Save JSON File.
+        </div>
+    </div>
+</div>
+
+
+<div class="row m-3">
+    <div class="col">
+        <ul class="list-group">
+            @foreach (var jsonFile in Model)
+            {
+                <li class="list-group-item" data-directory="@jsonFile.Directory" data-name="@jsonFile.Name" data-fullname="@jsonFile.FullName">
+                    @jsonFile.Name
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+
+
+<div class="row mx-3">
+    <div class="col">
+
+        <div id="json-editor"></div>
+        <form method="post" class="my-1" id="update-json-file-form" asp-action="UpdateJsonFile" asp-controller="Home">
+            <input type="text" name="Name" hidden />
+            <input type="text" name="FullName" hidden />
+            <input type="text" name="Directory" hidden />
+            <input type="text" name="Content" hidden />
+            <input type="button" id="sub" class="btn btn-sm btn-success" />
+        </form>
+    </div>
+</div>
+
+
+
+@section scripts {
+    <script>
+
+        let jsonEditorDiv = document.getElementById('json-editor');
+
+        let jsonEditorOptions = {
+            mode: 'preview',
+            modes: ['code', 'form', 'text', 'tree', 'view', 'preview'],
+            search: true,
+
+        };
+
+        let jsonEditor = new JSONEditor(jsonEditorDiv, jsonEditorOptions);
+
+        $("li.list-group-item").on('click', function (event) {
+            let fullName = $(this).data("fullname");
+            let directory = $(this).data("directory");
+            let name = $(this).data("name");
+
+            $("input[name=Name]").val(name);
+            $("input[name=Directory]").val(directory);
+            $("input[name=FullName]").val(fullName);
+
+            alert($("input[name=FullName]").val())
+
+            $.get(`@Url.Action("GetJsonFile","Home")?path=${fullName}`, function (data) {
+                jsonEditor.set(data);
+            });
+
+        });
+
+        $("#sub").on('click', function (event) {
+
+            $("input[name=Content]").val(JSON.stringify(jsonEditor.get()));
+            $("#update-json-file-form").submit();
+        });
+
+    </script>
+}
